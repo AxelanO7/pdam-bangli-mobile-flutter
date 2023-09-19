@@ -149,17 +149,14 @@ class ComplaintItem extends StatelessWidget {
                       ],
                     ),
                   ),
-                  InkWell(
-                    onTap: onTap,
-                    child: const Text(
-                      'Lihat Semua',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 10,
-                        fontFamily: 'Plus Jakarta Sans',
-                        fontWeight: FontWeight.w700,
-                        decoration: TextDecoration.underline,
-                      ),
+                  const Text(
+                    'Lihat Semua',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 10,
+                      fontFamily: 'Plus Jakarta Sans',
+                      fontWeight: FontWeight.w700,
+                      decoration: TextDecoration.underline,
                     ),
                   ),
                 ],

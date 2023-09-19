@@ -1,5 +1,6 @@
 import 'package:pdam_bangli/src/apis/officer/get_assignments_api.dart';
 import 'package:pdam_bangli/src/core/base_import.dart';
+import 'package:pdam_bangli/src/helpers/alert_helper.dart';
 import 'package:pdam_bangli/src/models/officer/models/report.dart';
 
 import 'sections/assignment_detail_section.dart';
@@ -8,7 +9,10 @@ import 'sections/assignment_list_section.dart';
 class AssignmentController extends BaseController {
   PageController pageController = PageController();
   int pageIndex = 0;
-  bool isRefresh = false;
+  bool isRefresh = false, isLoadingAssignments = false;
+
+  Report? selectedAssignment;
+  List<Report?>? listAssignment;
 
   @override
   onInit() {
@@ -34,19 +38,21 @@ class AssignmentController extends BaseController {
     if (pageController.page == 0) {
       pageIndex = 0;
       update();
-      return Get.back();
+      Get.back();
+      return;
     } else {
       pageIndex = 0;
       update();
-      return pageController.previousPage(
-          duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
+      await pageController.previousPage(duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
+      selectedAssignment = null;
+      return;
     }
   }
 
   Widget pageItemBuilder(context, position) {
     switch (position) {
       case 0:
-        return const AssignmentSection();
+        return const ListAssignmentSection();
       case 1:
         return const AssignmentDetailSection();
       default:
@@ -54,29 +60,33 @@ class AssignmentController extends BaseController {
     }
   }
 
-  tapAssignmentItem() {
+  tapAssignmentItem(Report item) {
+    selectedAssignment = item;
     pageIndex = 1;
     update();
-    return pageController.nextPage(
-        duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
+    pageController.nextPage(duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
+    return;
   }
 
-  onRefreshLocation() {
+  onRefreshLocation() async {
     isRefresh = true;
     update();
-    Future.delayed(
-      const Duration(seconds: 2),
-      () {
-        isRefresh = false;
-        update();
-      },
-    );
+    await Future.delayed(const Duration(seconds: 2));
+    isRefresh = false;
+    update();
   }
 
   getReport() async {
+    isLoadingAssignments = true;
+    update();
     var result = await GetAssignmentsApi().request();
     if (result.status) {
-      List<Report?> data = result.listData as List<Report?>;
+      listAssignment = result.listData as List<Report?>;
+    } else {
+      AlertHelper.snackbar(result.message, isError: true, title: "Gagal");
     }
+    print('length ${listAssignment?.length}');
+    isLoadingAssignments = false;
+    update();
   }
 }

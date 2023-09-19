@@ -4,11 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pdam_bangli/src/apis/bank_account/get_complaints_api.dart';
 import 'package:pdam_bangli/src/apis/bank_account/submit_complaint_api.dart';
-import 'package:pdam_bangli/src/apis/officer/get_assignments_api.dart';
 import 'package:pdam_bangli/src/core/base_import.dart';
 import 'package:pdam_bangli/src/helpers/alert_helper.dart';
 import 'package:pdam_bangli/src/models/bank_account/models/complaint.dart';
-import 'package:pdam_bangli/src/models/officer/models/report.dart';
 
 import 'popups/add_complaint_popup.dart';
 import 'sections/complaint_detail_section.dart';
@@ -20,7 +18,7 @@ class ComplaintController extends BaseController {
   String responseComplaint = "", descComplaint = "";
   int pageIndex = 0, numberBankAccount = 0;
   double scoreRespondedComplaint = 0;
-  bool featureBuiltinImageChooser = true, isValidatedComplaint = false, isLoadingGetComplaints = false, isLoadingAddComplaint = false;
+  bool featureBuiltinImageChooser = true, isValidatedComplaint = false, isLoadingComplaints = false, isLoadingAddComplaint = false;
   File? file;
 
   List<Complaint?>? complaintList;
@@ -31,17 +29,13 @@ class ComplaintController extends BaseController {
 
   @override
   onInit() {
-    isLoadingGetComplaints = true;
-    update();
     super.onInit();
   }
 
   @override
   onReady() async {
     numberBankAccount = await getNumberBankAccount();
-    await getComplaints();
-    isLoadingGetComplaints = false;
-    update();
+    getComplaints();
     super.onReady();
   }
 
@@ -203,10 +197,16 @@ class ComplaintController extends BaseController {
   }
 
   getComplaints() async {
+    isLoadingComplaints = true;
+    update();
     var result = await GetComplaintsApi().request(accountId: numberBankAccount);
     if (result.status) {
       complaintList = result.listData as List<Complaint?>;
+    } else {
+      AlertHelper.snackbar(result.message, isError: true, title: "Gagal");
     }
+    isLoadingComplaints = false;
+    update();
   }
 
   addComplaint() async {

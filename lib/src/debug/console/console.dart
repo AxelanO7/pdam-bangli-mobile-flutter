@@ -32,6 +32,9 @@ Future<void> showDebugConsole(BuildContext context) async {
               controller: _tokenController,
               decoration: InputDecoration(hintText: "Set Token"),
             ),
+            SizedBox(
+              height: 16,
+            ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: ColorStyle.blackColor,

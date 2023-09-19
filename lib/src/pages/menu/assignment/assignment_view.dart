@@ -8,9 +8,7 @@ class AssignmentView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseWidget<AssignmentController>(
-      controller: AssignmentController(),
-      backgroundColor: ColorStyle.whiteColor,
-      // appBar: AppBar(
+      controller: AssignmentController(), backgroundColor: ColorStyle.whiteColor, // appBar: AppBar(
       //   backgroundColor: ColorStyle.whiteColor,
       //   systemOverlayStyle: SystemUiOverlayStyle(
       //     // Android
@@ -43,9 +41,7 @@ class AssignmentView extends StatelessWidget {
                   ),
                 ),
                 title: Text(
-                  controller.pageIndex == 0.0
-                      ? 'Daftar Penugasan Pengaduan'
-                      : 'Penanganan Pengaduan',
+                  controller.pageIndex == 0.0 ? 'Daftar Penugasan Pengaduan' : 'Penanganan Pengaduan',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: ColorStyle.blackColor,
@@ -66,6 +62,7 @@ class AssignmentView extends StatelessWidget {
                 ],
               ),
               backgroundColor: ColorStyle.whiteColor,
+              // todo : detail assignment information
               bottomNavigationBar: controller.pageIndex != 0
                   ? Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 28),
@@ -133,21 +130,15 @@ class AssignmentView extends StatelessWidget {
                                         height: Get.height * 6 / 100,
                                         child: OutlinedButton(
                                           style: OutlinedButton.styleFrom(
-                                            side: BorderSide(
-                                                color: ColorStyle.blackColor),
+                                            side: BorderSide(color: ColorStyle.blackColor),
                                             shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      12), // <-- Radius
+                                              borderRadius: BorderRadius.circular(12), // <-- Radius
                                             ),
                                           ),
                                           onPressed: () {},
                                           child: Text(
                                             'Di Proses',
-                                            style: TypographyStyle.body1bBold
-                                                .copyWith(
-                                                    color:
-                                                        ColorStyle.blackColor),
+                                            style: TypographyStyle.body1bBold.copyWith(color: ColorStyle.blackColor),
                                           ),
                                         ),
                                       ),
@@ -159,12 +150,9 @@ class AssignmentView extends StatelessWidget {
                                         height: Get.height * 6 / 100,
                                         child: ElevatedButton(
                                           style: ElevatedButton.styleFrom(
-                                            backgroundColor:
-                                                ColorStyle.blackColor,
+                                            backgroundColor: ColorStyle.blackColor,
                                             shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      12), // <-- Radius
+                                              borderRadius: BorderRadius.circular(12), // <-- Radius
                                             ),
                                           ),
                                           onPressed: () {},
@@ -185,10 +173,7 @@ class AssignmentView extends StatelessWidget {
                     )
                   : const SizedBox.shrink(),
               body: PageView.builder(
-                  controller: controller.pageController,
-                  itemCount: 2,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: controller.pageItemBuilder),
+                  controller: controller.pageController, itemCount: 2, physics: const NeverScrollableScrollPhysics(), itemBuilder: controller.pageItemBuilder),
             ),
           ),
         ),

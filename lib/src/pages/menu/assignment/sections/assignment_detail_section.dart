@@ -19,14 +19,15 @@ class AssignmentDetailSection extends StatelessWidget {
                       child: SizedBox(
                         height: 32,
                         width: 32,
-                        child: CircularProgressIndicator(
-                            color: ColorStyle.blackColor),
+                        child: CircularProgressIndicator(color: ColorStyle.blackColor),
                       ),
                     )
-                  : const GoogleMap(
+                  : GoogleMap(
                       initialCameraPosition: CameraPosition(
                         zoom: 50,
-                        target: LatLng(-8.46394469999999, 115.35238032883625),
+                        target: LatLng(double.parse(controller.selectedAssignment?.account.lat ?? '-8.46394469999999'),
+                            double.parse(controller.selectedAssignment?.account.lng ?? '115.35238032883625')),
+                        // target: LatLng(-8.46394469999999, 115.35238032883625),
                       ),
                     ),
             ),

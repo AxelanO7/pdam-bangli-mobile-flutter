@@ -8,7 +8,7 @@ class ComplaintListSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ComplaintController>(
-      builder: (controller) => controller.isLoadingGetComplaints
+      builder: (controller) => controller.isLoadingComplaints
           ? Center(
               child: SizedBox(
                 height: 32,

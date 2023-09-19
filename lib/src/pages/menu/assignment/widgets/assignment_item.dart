@@ -1,10 +1,13 @@
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:pdam_bangli/src/core/base_import.dart';
+import 'package:pdam_bangli/src/helpers/time_helper.dart';
+import 'package:pdam_bangli/src/models/officer/models/report.dart';
 
 class AssignmentItem extends StatelessWidget {
   final Function() onTap;
   final int index;
-  const AssignmentItem({super.key, required this.onTap, required this.index});
+  final Report? item;
+  const AssignmentItem({super.key, required this.onTap, required this.index, this.item});
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +40,7 @@ class AssignmentItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Pipa bocor sehingga air macet',
+                    item?.complaint ?? '',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: ColorStyle.blackColor,
@@ -47,17 +50,21 @@ class AssignmentItem extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    (index == 1)
-                        ? 'Diproses'
-                        : (index == 2)
-                            ? 'Selesai'
-                            : 'Menunggu',
+                    item?.status == 2
+                        ? 'Menunggu'
+                        : item?.status == 3
+                            ? 'Diproses'
+                            : item?.status == 4
+                                ? 'Selesai'
+                                : 'Belum Dikonfirmasi',
                     style: TextStyle(
-                      color: index == 1
-                          ? ColorStyle.blackColor
-                          : index == 2
-                              ? HexColor('49EF0E')
-                              : HexColor('FFB018'),
+                      color: item?.status == 1
+                          ? HexColor('FFB018')
+                          : item?.status == 2
+                              ? ColorStyle.blackColor
+                              : item?.status == 4
+                                  ? HexColor('49EF0E')
+                                  : ColorStyle.blackColor,
                       fontSize: 9,
                       fontFamily: 'Plus Jakarta Sans',
                       fontWeight: FontWeight.w700,
@@ -85,7 +92,7 @@ class AssignmentItem extends StatelessWidget {
                               ),
                             ),
                             TextSpan(
-                              text: '01-10-2023',
+                              text: '${TimeHelper.convertTimeCustomFormatterFromISO(item?.dateReport ?? "", "dd-MM-yyyy")}',
                               style: TextStyle(
                                 color: HexColor('A0A7BA'),
                                 fontSize: 12,
@@ -110,7 +117,8 @@ class AssignmentItem extends StatelessWidget {
                               ),
                             ),
                             TextSpan(
-                              text: '11-10-2023',
+                              text:
+                                  '${item?.dateConfirmationPdam == '-' ? '-' : TimeHelper.convertTimeCustomFormatterFromISO(item?.dateConfirmationPdam ?? "", "dd-MM-yyyy")}',
                               style: TextStyle(
                                 color: HexColor('A0A7BA'),
                                 fontSize: 12,
@@ -135,7 +143,7 @@ class AssignmentItem extends StatelessWidget {
                               ),
                             ),
                             TextSpan(
-                              text: '01-10-2023',
+                              text: '${item?.dateComplete == '-' ? '-' : TimeHelper.convertTimeCustomFormatterFromISO(item?.dateComplete ?? "", "dd-MM-yyyy")}',
                               style: TextStyle(
                                 color: HexColor('A0A7BA'),
                                 fontSize: 12,
@@ -160,7 +168,7 @@ class AssignmentItem extends StatelessWidget {
                               ),
                             ),
                             TextSpan(
-                              text: 'Ketut Jerink',
+                              text: '${item?.officer ?? "-"}',
                               style: TextStyle(
                                 color: HexColor('A0A7BA'),
                                 fontSize: 12,
@@ -171,36 +179,32 @@ class AssignmentItem extends StatelessWidget {
                           ],
                         ),
                       ),
-                      if (index == 2)
+                      if (item?.status == 4)
                         Padding(
                           padding: const EdgeInsets.only(top: 8.0),
                           child: RatingBar.builder(
+                            ignoreGestures: true,
                             unratedColor: ColorStyle.blackColor,
-                            initialRating: 3,
-                            minRating: 1,
+                            initialRating: item?.score?.toDouble() ?? 0,
                             direction: Axis.horizontal,
                             itemCount: 5,
                             itemBuilder: (context, _) => const Icon(
                               Icons.star,
                               color: Colors.amber,
                             ),
-                            onRatingUpdate: (rating) {
-                            },
+                            onRatingUpdate: (rating) {},
                           ),
                         )
                     ],
                   ),
-                  InkWell(
-                    onTap: onTap,
-                    child: const Text(
-                      'Lihat Semua',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 10,
-                        fontFamily: 'Plus Jakarta Sans',
-                        fontWeight: FontWeight.w700,
-                        decoration: TextDecoration.underline,
-                      ),
+                  const Text(
+                    'Lihat Semua',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 10,
+                      fontFamily: 'Plus Jakarta Sans',
+                      fontWeight: FontWeight.w700,
+                      decoration: TextDecoration.underline,
                     ),
                   ),
                 ],
